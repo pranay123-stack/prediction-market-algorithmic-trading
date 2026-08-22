@@ -71,6 +71,11 @@ git clone https://github.com/pranay123-stack/polymarket-copy-trading-hft-rust
 cd polymarket-copy-trading-hft-rust && cargo test --workspace   # expect 341 passing
 ```
 
+### Related
+Sports traded on betting exchanges rather than event contracts lives in
+**[Algorithmic Sports Betting](https://github.com/pranay123-stack/algorithmic-sports-betting)**.
+`nba-prediction-edge` and `matchcall` appear in both.
+
 **Tech across this portfolio:** Rust, Tokio, Solana, Anchor, TypeScript, EIP-712
 
 ---
