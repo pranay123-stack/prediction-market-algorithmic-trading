@@ -72,3 +72,27 @@ cd polymarket-copy-trading-hft-rust && cargo test --workspace   # expect 341 pas
 ```
 
 **Tech across this portfolio:** Rust, Tokio, Solana, Anchor, TypeScript, EIP-712
+
+---
+
+## Not currently working
+
+### Polymarket HFT Arbitrage — Rust
+36.5k lines across three venue adapters. **It does not compile** — `cargo build` fails, so
+its 166 tests have never run. Its CI referenced a GitHub Action that does not exist, which
+is why nothing caught it; that reference is now fixed so CI reports the true state.
+Published because the architecture is worth reading, clearly labelled because it does not work.
+
+[View repository →](https://github.com/pranay123-stack/polymarket-hft-arbitrage)
+
+---
+
+## Design Specifications *(not implemented)*
+
+These repositories contain **architecture documents only — no source code**. They are
+published as planning artefacts and each carries a banner saying so. Any latency,
+throughput or performance figure in them is an unmeasured design target, not a result.
+
+| Specification | Scope |
+|---|---|
+| [prediction-market-projects](https://github.com/pranay123-stack/prediction-market-projects) | Outcome tokens, LMSR/CPMM pricing, oracle resolution, futarchy |
