@@ -4,7 +4,7 @@ Trading and settlement infrastructure for prediction markets — Polymarket exec
 research, a copy-trading engine, and an on-chain pari-mutuel protocol.
 
 Prediction markets are where most of my recent execution work has landed. Two of these
-projects also anchor my [low-latency execution portfolio](https://github.com/pranay123-stack/low-latency-execution-systems);
+projects also anchor my [low-latency execution portfolio](https://github.com/pranay123-stack/crypto-exchange-development);
 they appear in both because they genuinely belong to both.
 
 ---
