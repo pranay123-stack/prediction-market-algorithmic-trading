@@ -1,4 +1,4 @@
-# Prediction Market Systems
+# Prediction Market Algorithmic Trading
 
 Trading and settlement infrastructure for prediction markets — Polymarket execution
 research, a copy-trading engine, and an on-chain pari-mutuel protocol.
