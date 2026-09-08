@@ -4,8 +4,10 @@ Trading and settlement infrastructure for prediction markets — Kalshi multi-le
 pricing, Polymarket execution research, a copy-trading engine, and an on-chain
 pari-mutuel protocol.
 
-Prediction markets are where most of my recent execution work has landed. Two of these
-projects also anchor my [low-latency execution portfolio](https://github.com/pranay123-stack/crypto-exchange-development);
+Prediction markets are where most of my recent execution work has landed. The two Kalshi
+projects are a deliberate pair: one asks what a multi-leg contract is *worth*, the other
+asks how much of it you can actually *trade* and what stops you. Two of these projects
+also anchor my [low-latency execution portfolio](https://github.com/pranay123-stack/crypto-exchange-development);
 they appear in both because they genuinely belong to both.
 
 ---
@@ -34,6 +36,39 @@ correlation-awareness cuts that. It holds in 3 of 4 seeds tested, and the README
 plainly that the magnitude is not established.
 
 [View repository →](https://github.com/pranay123-stack/kalshi-rfq-combo-pricing-engine)
+
+### Kalshi Sports RFQ Market Maker — Volume & Risk Optimizer — Python
+Given a price, how much business can the desk actually do — and what stops it?
+
+- The companion to the combo pricer above: that one asks what a parlay is worth, this
+  one asks how much of it you can trade. Runs on **real Kalshi data** — 23,504 markets,
+  **557,434 executed trades**, 1,067,030 one-minute quote periods, 1,920 real multi-leg
+  combos, all settled outcomes. Read-only, `GET` only, no credentials.
+- **Adverse selection measured, not modelled.** Flow the maker won was worth
+  **−0.0155/contract**; flow it passed on would have been **+0.0048**. The same prices
+  on the declined flow make money — the desk loses because of *which* flow they win.
+- Closed four traps that would each have faked every number: a settled market's stored
+  price is post-settlement; a strategy that can see the execution price wins everything
+  risk-free; hourly quotes made the study's **own latency** look like −0.20 of adverse
+  selection; and `taker_price` mixes YES and NO for the same market. All four are pinned
+  by tests, including a dedicated causality suite.
+- Found the venue's real microstructure rather than assuming it: **70% of Kalshi quote
+  periods are exactly one cent wide**, so price improvement is usually *arithmetically
+  impossible* and a maker competes on queue priority instead.
+- **978 tests pass** — and pass on a *fresh clone*, offline, against a committed 9 MB
+  slice of real Kalshi data (47 markets, six real combos, 7,849 trades, real
+  settlements). That slice immediately caught a bug hand-written fixtures never
+  would: `rfq_id` was ticker + millisecond, which is not unique on real tape.
+- Grid search over 2,880 configurations, FastAPI service, 10-page Streamlit dashboard.
+
+**Honest status:** the headline is a **negative result** — spread capture at this latency
+does not pay. A one-cent spread minus Kalshi's real maker fee leaves about a twentieth of
+a cent of theoretical margin, and measured adverse selection is two orders of magnitude
+larger. It is reported with a sensitivity sweep over the one remaining behavioural
+assumption (queue position, which public data cannot reveal); the sign and the ordering
+hold across its entire range.
+
+[View repository →](https://github.com/pranay123-stack/kalshi-rfq-market-maker-volume-optimizer)
 
 ### Polymarket CLOB Execution Research — Rust
 Where does theoretical edge actually disappear?
@@ -97,6 +132,10 @@ cd polymarket-copy-trading-hft-rust && cargo test --workspace   # expect 341 pas
 git clone https://github.com/pranay123-stack/kalshi-rfq-combo-pricing-engine
 cd kalshi-rfq-combo-pricing-engine
 pip install -r requirements-dev.txt && pytest -q                # expect 1063 passing
+
+git clone https://github.com/pranay123-stack/kalshi-rfq-market-maker-volume-optimizer
+cd kalshi-rfq-market-maker-volume-optimizer
+make install && make test              # expect 972 passing, 6 skipped (no ingest needed)
 ```
 
 ### Related
