@@ -1,7 +1,8 @@
 # Prediction Market Algorithmic Trading
 
-Trading and settlement infrastructure for prediction markets — Polymarket execution
-research, a copy-trading engine, and an on-chain pari-mutuel protocol.
+Trading and settlement infrastructure for prediction markets — Kalshi multi-leg combo
+pricing, Polymarket execution research, a copy-trading engine, and an on-chain
+pari-mutuel protocol.
 
 Prediction markets are where most of my recent execution work has landed. Two of these
 projects also anchor my [low-latency execution portfolio](https://github.com/pranay123-stack/crypto-exchange-development);
@@ -10,6 +11,29 @@ they appear in both because they genuinely belong to both.
 ---
 
 ## Featured Projects
+
+### Kalshi Sports RFQ Combo Pricing — Python
+What is a three-leg parlay actually worth, and who takes the other side?
+
+- Prices multi-leg NFL / NCAAF / NBA / NCAAB combos against **real Kalshi order books**
+  — read-only, `GET` only, no credentials, no order-entry path
+- Correlations **fitted from real settled games**, not assumed: tetrachoric estimation
+  with bootstrap CIs puts moneyline × same-team spread at **ρ = +0.874 [0.767, 0.949]**,
+  against an independently hand-set +0.86 prior
+- Caught two silent-failure bugs that would have faked every result — a settled Kalshi
+  market leaks its own outcome through its book and last print, and an empty 0/100 book
+  midpoints to a fabricated 50c
+- **1,063 tests pass**, with no network access in CI (committed 47-game snapshot plus
+  recorded real-API fixtures)
+
+**Honest status:** against real Kalshi prices every strategy has *negative* realised
+edge — which is what should happen to a maker with no informational advantage in a
+competitively-made market. The finding that survives is the relative one: naive
+independence pricing gives away roughly 7.5c per contract to adverse selection, and
+correlation-awareness cuts that. It holds in 3 of 4 seeds tested, and the README states
+plainly that the magnitude is not established.
+
+[View repository →](https://github.com/pranay123-stack/kalshi-rfq-combo-pricing-engine)
 
 ### Polymarket CLOB Execution Research — Rust
 Where does theoretical edge actually disappear?
@@ -69,6 +93,10 @@ cd polymarket-live-clob-research && cargo test        # expect 177 passing
 
 git clone https://github.com/pranay123-stack/polymarket-copy-trading-hft-rust
 cd polymarket-copy-trading-hft-rust && cargo test --workspace   # expect 341 passing
+
+git clone https://github.com/pranay123-stack/kalshi-rfq-combo-pricing-engine
+cd kalshi-rfq-combo-pricing-engine
+pip install -r requirements-dev.txt && pytest -q                # expect 1063 passing
 ```
 
 ### Related
@@ -76,7 +104,7 @@ Sports traded on betting exchanges rather than event contracts lives in
 **[Algorithmic Sports Betting](https://github.com/pranay123-stack/algorithmic-sports-betting)**.
 `nba-prediction-edge` and `matchcall` appear in both.
 
-**Tech across this portfolio:** Rust, Tokio, Solana, Anchor, TypeScript, EIP-712
+**Tech across this portfolio:** Rust, Tokio, Solana, Anchor, TypeScript, EIP-712, Python, NumPy/SciPy, FastAPI, Streamlit
 
 ---
 
