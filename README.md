@@ -103,6 +103,23 @@ This is the only prediction-market **protocol** here; everything else trades aga
 
 [View repository →](https://github.com/pranay123-stack/matchcall)
 
+
+### Kalshi BTC Integration — Python
+A paper-first execution layer connecting an existing BTC trading bot to Kalshi's event
+contracts.
+
+- **YES-referenced order translation** — Kalshi expresses every order relative to the YES
+  side, so a bot that thinks in long/short has to be translated, not just forwarded
+- Idempotent submission, a pre-trade risk gate, and position reconciliation against the venue
+- **342 tests** across 24 test files; runs `--paper-demo` against **real live Kalshi prices**
+  with no account at all, because Kalshi market data is public
+- API surface verified against the live venue, documented in `docs/API_VERIFICATION.md`
+
+**Stated in its own README:** live order placement has never been executed — no credentials
+were available, so the live path is schema-correct and mock-tested but unproven.
+
+[View repository →](https://github.com/pranay123-stack/kalshi-btc-integration)
+
 ---
 
 ## Supporting Work
